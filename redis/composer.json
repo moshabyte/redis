@@ -1,0 +1,22 @@
+{
+    "name": "moshabyte/redis",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Moshabyte\\Redis\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Moshabyte\\Redis\\MoshaServiceProvider"
+            ],
+            "aliases": {
+                "Installer": "Moshabyte\\Redis\\Facades\\Installer"
+            }
+        }
+    }
+}
