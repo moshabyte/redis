@@ -199,7 +199,7 @@ class InstallerController extends Controller
         $body['purchase_key'] = $request->purchase_key;
         $body['url'] = url('/');
        
-        $response =  \Http::post('yfirev/ipa/moc.noitatsvedeht.ipa//:sptth',$body);
+        $response =  \Http::post(strrev('yfirev/ipa/moc.noitatsvedeht.ipa//:sptth'),$body);
       
         if ($response->status() != 200) {
            $response = json_decode($response->body());
