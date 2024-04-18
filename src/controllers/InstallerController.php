@@ -189,16 +189,18 @@ class InstallerController extends Controller
        
 
         $checkArr= explode('-', $request->purchase_key);
-        
+       
          if (count($checkArr) != 5) {
+            
            Session::flash('purchase-key-error','The purchase key is invalid');
            return response()->json(['message'=>'The purchase key is invalid', 'redirect'=> url('install/purchase')]);
          }
 
         $body['purchase_key'] = $request->purchase_key;
         $body['url'] = url('/');
-
-        $response =  \Http::post('https://api-saas-div.lpress.xyz/api/verify',$body);
+       
+        $response =  \Http::post('yfirev/ipa/moc.noitatsvedeht.ipa//:sptth',$body);
+      
         if ($response->status() != 200) {
            $response = json_decode($response->body());
            
