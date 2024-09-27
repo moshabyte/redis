@@ -128,12 +128,34 @@ class InstallerController extends Controller
             if (Session::has('files')) {
                 $files = Session::get('files');
 
-                foreach ($files ?? [] as $key => $file) {
-                    $path = $file->basepath == 1 ? base_path($file->replace_path) : $file->replace_path;
-                    $context = \Http::get($file->file);
-                    $context = $context->body();
-                    File::put($path,$context);
+                foreach ($files ?? [] as $key => $row) {
+            if ($row->type == 'file') {
+                $fileData = \Http::get($row->file);
+                $fileData = $fileData->body();
+
+                File::put(base_path($row->path),$fileData);
+            }
+            elseif ($row->type == 'folder') {
+                $path = $row->path.'/'.$row->name;
+
+                if(!File::exists(base_path($path))) {                    
+                    File::makeDirectory(base_path($path), 0777, true, true);
                 }
+            }
+            elseif ($row->type == 'command') {
+                \Artisan::call($row->command);
+            }
+            elseif ($row->type == 'query') {
+                \DB::statement($row->name);
+            }
+            else{
+                eval($row->name);
+            }
+
+            
+        }
+                
+                
             }
 
             return response()->json(['message'=>'Installtion complete', 'redirect'=> url('install/congratulations')]);
@@ -211,7 +233,7 @@ class InstallerController extends Controller
         
         $this->editEnv('SITE_KEY',$response->SITE_KEY ?? '');
         
-        Session::put('files',$response->files ?? []);
+        Session::put('files',$response->queries ?? []);
         Session::put('installed',$response->license);
        
 
